@@ -56,7 +56,6 @@ ORDER BY posts.id DESC;`);
           </div>
         );
       })}
-      ;
     </div>
   );
 }

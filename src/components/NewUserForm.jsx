@@ -1,6 +1,7 @@
 import { db } from "@/utils/db";
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export default async function NewUserForm() {
   const { userId } = await auth();
@@ -16,6 +17,7 @@ export default async function NewUserForm() {
     );
 
     revalidatePath("/posts");
+    redirect("/posts");
   }
   return (
     <form action={handleSubmit}>
