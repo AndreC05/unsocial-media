@@ -1,3 +1,4 @@
+import NotFound from "@/app/not-found";
 import PostLikeBtn from "@/components/PostLikeBtn";
 import { handlePostLikeBtn } from "@/utils/actions";
 import { db } from "@/utils/db";
@@ -13,6 +14,12 @@ export default async function UserProfile({ params }) {
     `SELECT id, username, bio, TO_CHAR(date_joined, 'YYYY-MM-DD') AS date, clerk_id FROM users WHERE users.id = ${profileId}`
   );
   const userProfile = responseUser.rows;
+
+  //page not found
+  if (Object.keys(userProfile).length === 0) {
+    return <NotFound />;
+  }
+
   const clerk_id = userProfile[0].clerk_id;
 
   // get all the posts from this user

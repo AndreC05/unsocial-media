@@ -1,5 +1,6 @@
 //page with a single post and its comments
 
+import NotFound from "@/app/not-found";
 import AddNewCommentBtn from "@/components/AddNewCommentBtn";
 import CommentLikeBtn from "@/components/CommentLikeBtn";
 import PostLikeBtn from "@/components/PostLikeBtn";
@@ -38,6 +39,10 @@ export default async function SinglePostsPage({ params }) {
   );
 
   const comments = responseComments.rows;
+
+  if (Object.keys(post).length === 0) {
+    return <NotFound />;
+  }
 
   return (
     <>
