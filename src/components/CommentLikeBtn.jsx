@@ -1,5 +1,7 @@
 "use client";
 
+import { HeartIcon } from "@radix-ui/react-icons";
+
 export default function CommentLikeBtn({
   comment,
   post,
@@ -9,5 +11,9 @@ export default function CommentLikeBtn({
     await handleCommentLikeBtn(comment, post);
   }
 
-  return <button onClick={() => handleLikeClick(comment)}>Like</button>;
+  return (
+    <button title="Like Comment" onClick={() => handleLikeClick(comment)}>
+      <HeartIcon />
+    </button>
+  );
 }

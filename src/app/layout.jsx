@@ -7,6 +7,7 @@ import {
 } from "@clerk/nextjs";
 import "./globals.css";
 import Link from "next/link";
+import NavMenu from "@/components/NavMenu";
 
 export const metadata = {
   title: "Unsocial media",
@@ -18,20 +19,19 @@ export default function RootLayout({ children }) {
     <ClerkProvider>
       <html lang="en">
         <body>
-          <h1>Unsocial Media</h1>
-          <nav>
-            <Link href="/">Home</Link>
-            <Link href="/about">About</Link>
-            <Link href="/posts">Posts</Link>
-            <Link href="/users">Users</Link>
-          </nav>
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-          {children}
+          <header>
+            <h1>Unsocial Media</h1>
+            <nav>
+              <NavMenu />
+            </nav>
+            <SignedOut>
+              <SignInButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </header>
+          <main>{children}</main>
         </body>
       </html>
     </ClerkProvider>

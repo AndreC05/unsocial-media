@@ -16,7 +16,7 @@ export default async function UserProfile({ params }) {
   const userProfile = responseUser.rows;
 
   //page not found
-  if (Object.keys(userProfile).length === 0) {
+  if (userProfile.length === 0) {
     return <NotFound />;
   }
 

@@ -1,3 +1,4 @@
+import { HomeIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -7,7 +8,9 @@ export default function NotFound() {
         The page you tried to access could not be found. Please return to the
         Home page
       </p>
-      <Link href={"/"}>Home</Link>
+      <Link href={"/"}>
+        Home <HomeIcon />{" "}
+      </Link>
     </div>
   );
 }

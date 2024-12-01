@@ -1,3 +1,14 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+html,
+body {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: monospace;
+  color: antiquewhite;
+}
+body {
+  background-color: rgba(9, 9, 26, 0.918);
+}
+ul {
+  list-style-type: none;
+}

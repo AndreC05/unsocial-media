@@ -9,7 +9,9 @@ export default function AddNewCommentBtn({ postId }) {
 
   return (
     <>
-      <button onClick={handleBtnClick}>Add new Comment</button>
+      <button title="Add New Post" onClick={handleBtnClick}>
+        Add new Comment
+      </button>
     </>
   );
 }

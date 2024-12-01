@@ -1,6 +1,14 @@
+import EditPostBtn from "@/components/EditPostBtn";
 import NewUserForm from "@/components/NewUserForm";
+import PostDeleteBtn from "@/components/PostDeleteBtn";
 import PostLikeBtn from "@/components/PostLikeBtn";
-import { handleAddNewPostBtn, handlePostLikeBtn } from "@/utils/actions";
+import ViewCommentBtn from "@/components/ViewCommentsBtn";
+import {
+  handleAddNewPostBtn,
+  handlePostDeleteBtn,
+  handlePostEditBtn,
+  handlePostLikeBtn,
+} from "@/utils/actions";
 import { db } from "@/utils/db";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
@@ -11,7 +19,7 @@ export default async function PostsPage() {
 
   // get all the posts
   const responsePosts = await db.query(`
-    SELECT posts.id, posts.title, posts.content, users.username, users.id as user_id, TO_CHAR(posts.post_date, 'YYYY-MM-DD') AS date, posts.likes
+    SELECT posts.id, posts.title, posts.clerk_id, posts.content, users.username, users.id as user_id, TO_CHAR(posts.post_date, 'YYYY-MM-DD') AS date, posts.likes
 FROM posts
 JOIN users ON posts.clerk_id = users.clerk_id
 ORDER BY posts.id DESC;`);
@@ -46,13 +54,26 @@ ORDER BY posts.id DESC;`);
           <div key={post.id}>
             <h3>
               Username:{" "}
-              <Link href={`/user/${post.user_id}`}>{post.username}</Link>
+              <Link href={`/users/${post.user_id}`}>{post.username}</Link>
             </h3>
             <h4>Title: {post.title}</h4>
             <p>Content: {post.content}</p>
             <h4>Date: {post.date}</h4>
             <p>Likes: {post.likes}</p>
             <PostLikeBtn post={post} handlePostLikeBtn={handlePostLikeBtn} />
+            <ViewCommentBtn postId={post.id} />
+            {userId == post.clerk_id && (
+              <PostDeleteBtn
+                post={post}
+                handlePostDeleteBtn={handlePostDeleteBtn}
+              />
+            )}
+            {userId == post.clerk_id && (
+              <EditPostBtn
+                postId={post.id}
+                handlePostEditBtn={handlePostEditBtn}
+              />
+            )}
           </div>
         );
       })}
