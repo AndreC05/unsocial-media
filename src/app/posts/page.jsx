@@ -13,6 +13,7 @@ import { db } from "@/utils/db";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
+import { Suspense } from "react";
 
 export default async function PostsPage() {
   const { userId } = await auth();
@@ -33,14 +34,16 @@ ORDER BY posts.id DESC;`);
 
   return (
     <div>
-      <h2>Posts</h2>
+      <h2 className="postsTitle">Posts</h2>
       <SignedIn>
         {usernameNum === 1 ? (
           <button onClick={handleAddNewPostBtn}>Add Post</button>
         ) : (
           <div>
             <p>please create a username before adding new posts</p>
-            <NewUserForm />
+            <Suspense fallback={<p>Loading ...</p>}>
+              <NewUserForm />
+            </Suspense>
           </div>
         )}
       </SignedIn>
@@ -49,34 +52,36 @@ ORDER BY posts.id DESC;`);
           Please click here to sign in before making a post
         </Link>
       </SignedOut>
-      {posts.map((post) => {
-        return (
-          <div key={post.id}>
-            <h3>
-              Username:{" "}
-              <Link href={`/users/${post.user_id}`}>{post.username}</Link>
-            </h3>
-            <h4>Title: {post.title}</h4>
-            <p>Content: {post.content}</p>
-            <h4>Date: {post.date}</h4>
-            <p>Likes: {post.likes}</p>
-            <PostLikeBtn post={post} handlePostLikeBtn={handlePostLikeBtn} />
-            <ViewCommentBtn postId={post.id} />
-            {userId == post.clerk_id && (
-              <PostDeleteBtn
-                post={post}
-                handlePostDeleteBtn={handlePostDeleteBtn}
-              />
-            )}
-            {userId == post.clerk_id && (
-              <EditPostBtn
-                postId={post.id}
-                handlePostEditBtn={handlePostEditBtn}
-              />
-            )}
-          </div>
-        );
-      })}
+      <Suspense fallback={<p>Loading ...</p>}>
+        {posts.map((post) => {
+          return (
+            <div key={post.id}>
+              <h3>
+                Username:{" "}
+                <Link href={`/users/${post.user_id}`}>{post.username}</Link>
+              </h3>
+              <h4>Title: {post.title}</h4>
+              <p>Content: {post.content}</p>
+              <h4>Date: {post.date}</h4>
+              <p>Likes: {post.likes}</p>
+              <PostLikeBtn post={post} handlePostLikeBtn={handlePostLikeBtn} />
+              <ViewCommentBtn postId={post.id} />
+              {userId == post.clerk_id && (
+                <PostDeleteBtn
+                  post={post}
+                  handlePostDeleteBtn={handlePostDeleteBtn}
+                />
+              )}
+              {userId == post.clerk_id && (
+                <EditPostBtn
+                  postId={post.id}
+                  handlePostEditBtn={handlePostEditBtn}
+                />
+              )}
+            </div>
+          );
+        })}
+      </Suspense>
     </div>
   );
 }

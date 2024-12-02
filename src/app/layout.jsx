@@ -21,11 +21,11 @@ export default function RootLayout({ children }) {
         <body>
           <header>
             <h1>Unsocial Media</h1>
-            <nav>
-              <NavMenu />
-            </nav>
+            <NavMenu />
             <SignedOut>
-              <SignInButton />
+              <SignInButton>
+                <button className="signInBtn">Sign In</button>
+              </SignInButton>
             </SignedOut>
             <SignedIn>
               <UserButton />

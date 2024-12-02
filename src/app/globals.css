@@ -8,7 +8,92 @@ body {
 }
 body {
   background-color: rgba(9, 9, 26, 0.918);
+  display: grid;
+  display: grid;
+  grid-template-rows: 10% 1fr;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-flow: column;
+  min-height: 100vh;
+  max-width: 100vw;
 }
-ul {
+
+/*No idea why this is showing as a white box at the top of the page*/
+nextjs-portal {
+  opacity: 0;
+}
+
+/*----------------------------------------------------HEADER---------------------------------------------------------*/
+header {
+  display: grid;
+  grid-column: 1 / span 3;
+  grid-row: 1;
+  grid-template-columns: subgrid;
+}
+
+header h1 {
+  align-self: center;
+  margin-left: 8px;
+  font-size: 2.5rem;
+  color: rgb(250, 217, 175);
+}
+
+header nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+header button {
+  height: 40px;
+  width: 60px;
+  align-self: center;
+  justify-self: end;
+  margin-right: 20px;
+}
+
+.cl-rootBox {
+  align-self: center;
+  justify-self: end;
+  margin-right: 20px;
+}
+
+header ul {
   list-style-type: none;
+}
+
+header li {
+  display: Inline-Block;
+  margin-right: 10px;
+}
+
+header a {
+  text-decoration: none;
+  color: rgb(142, 253, 253);
+}
+
+/*----------------------------------------------------MAIN---------------------------------------------------------*/
+main {
+  grid-column: 1 / span 3;
+  grid-row: 2;
+  margin-left: 15px;
+}
+main button {
+  border: none;
+  margin-right: 5px;
+  border-radius: 10px;
+}
+main button:hover {
+  border: 2px solid goldenrod;
+}
+
+main a {
+  color: aquamarine;
+}
+
+.profileTitle,
+.userPostsTitle,
+.postsTitle,
+.aboutTitle,
+.homeTitle,
+.usersTitle {
+  color: rgb(241, 166, 67);
 }

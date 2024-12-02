@@ -1,9 +1,11 @@
 import NotFound from "@/app/not-found";
 import PostLikeBtn from "@/components/PostLikeBtn";
+import ViewCommentBtn from "@/components/ViewCommentsBtn";
 import { handlePostLikeBtn } from "@/utils/actions";
 import { db } from "@/utils/db";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
+import { Suspense } from "react";
 
 //page containing info about 1 user
 export default async function UserProfile({ params }) {
@@ -37,24 +39,28 @@ ORDER BY posts.id DESC;`,
   return (
     <>
       <SignedIn>
-        {userProfile.map((user) => (
-          <div key={user.id}>
-            <h2>Username: {user.username}</h2>
-            <h4>Bio: {user.bio}</h4>
-            <h3>Date Joined: {user.date}</h3>
-          </div>
-        ))}
+        <Suspense fallback={<p>Loading ...</p>}>
+          <h2 className="profileTitle">Profile:</h2>
+          {userProfile.map((user) => (
+            <div key={user.id}>
+              <h2>Username: {user.username}</h2>
+              <h4>Bio: {user.bio}</h4>
+              <h3>Date Joined: {user.date}</h3>
+            </div>
+          ))}
 
-        <h2>All posts:</h2>
-        {posts.map((post) => (
-          <div key={post.id}>
-            <h3>Title: {post.title}</h3>
-            <p>Content: {post.content}</p>
-            <h4>Date: {post.date}</h4>
-            <p>Likes: {post.likes}</p>
-            <PostLikeBtn post={post} handlePostLikeBtn={handlePostLikeBtn} />
-          </div>
-        ))}
+          <h2 className="userPostsTitle">All posts:</h2>
+          {posts.map((post) => (
+            <div key={post.id}>
+              <h3>Title: {post.title}</h3>
+              <p>Content: {post.content}</p>
+              <h4>Date: {post.date}</h4>
+              <p>Likes: {post.likes}</p>
+              <PostLikeBtn post={post} handlePostLikeBtn={handlePostLikeBtn} />
+              <ViewCommentBtn postId={post.id} />
+            </div>
+          ))}
+        </Suspense>
       </SignedIn>
       <SignedOut>
         <Link href="/sign-in">Please click here to sign in</Link>

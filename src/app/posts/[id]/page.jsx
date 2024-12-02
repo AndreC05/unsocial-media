@@ -19,6 +19,7 @@ import { auth } from "@clerk/nextjs/server";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Link from "next/link";
 import EditCommentBtn from "@/components/EditCommentBtn";
+import { Suspense } from "react";
 
 export default async function SinglePostsPage({ params }) {
   const postId = (await params).id;
@@ -55,56 +56,60 @@ export default async function SinglePostsPage({ params }) {
   return (
     <>
       <SignedIn>
-        {post.map((p) => (
-          <div key={p.id}>
-            <h3>
-              Username: <Link href={`/users/${p.user_id}`}>{p.username}</Link>
-            </h3>
-            <h4>Title: {p.title}</h4>
-            <p>Content: {p.content}</p>
-            <h4>Date: {p.date}</h4>
-            <p>Likes: {p.likes}</p>
-            <PostLikeBtn post={p} handlePostLikeBtn={handlePostLikeBtn} />
-            {userId == p.clerk_id && (
-              <PostDeleteBtn
-                post={p}
-                handlePostDeleteBtn={handlePostDeleteBtn}
-              />
-            )}
-          </div>
-        ))}
-        <AddNewCommentBtn postId={postId} />
-        <h2>Comments</h2>
-        {comments.map((comment) => (
-          <div key={comment.id}>
-            <h3>
-              Username:{" "}
-              <Link href={`/users/${comment.user_id}`}>{comment.username}</Link>
-            </h3>
-            <p>Content: {comment.content}</p>
-            <h4>Date: {comment.date}</h4>
-            <p>Likes: {comment.likes}</p>
-            <CommentLikeBtn
-              comment={comment}
-              post={post}
-              handleCommentLikeBtn={handleCommentLikeBtn}
-            />
-            {userId == comment.clerk_id && (
-              <CommentDeleteBtn
+        <Suspense fallback={<p>Loading ...</p>}>
+          {post.map((p) => (
+            <div key={p.id}>
+              <h3>
+                Username: <Link href={`/users/${p.user_id}`}>{p.username}</Link>
+              </h3>
+              <h4>Title: {p.title}</h4>
+              <p>Content: {p.content}</p>
+              <h4>Date: {p.date}</h4>
+              <p>Likes: {p.likes}</p>
+              <PostLikeBtn post={p} handlePostLikeBtn={handlePostLikeBtn} />
+              {userId == p.clerk_id && (
+                <PostDeleteBtn
+                  post={p}
+                  handlePostDeleteBtn={handlePostDeleteBtn}
+                />
+              )}
+            </div>
+          ))}
+          <AddNewCommentBtn postId={postId} />
+          <h2>Comments</h2>
+          {comments.map((comment) => (
+            <div key={comment.id}>
+              <h3>
+                Username:{" "}
+                <Link href={`/users/${comment.user_id}`}>
+                  {comment.username}
+                </Link>
+              </h3>
+              <p>Content: {comment.content}</p>
+              <h4>Date: {comment.date}</h4>
+              <p>Likes: {comment.likes}</p>
+              <CommentLikeBtn
                 comment={comment}
                 post={post}
-                handleCommentDeleteBtn={handleCommentDeleteBtn}
+                handleCommentLikeBtn={handleCommentLikeBtn}
               />
-            )}
-            {userId == comment.clerk_id && (
-              <EditCommentBtn
-                postId={postId}
-                commentId={comment.id}
-                handleEditCommentBtn={handleEditCommentBtn}
-              />
-            )}
-          </div>
-        ))}
+              {userId == comment.clerk_id && (
+                <CommentDeleteBtn
+                  comment={comment}
+                  post={post}
+                  handleCommentDeleteBtn={handleCommentDeleteBtn}
+                />
+              )}
+              {userId == comment.clerk_id && (
+                <EditCommentBtn
+                  postId={postId}
+                  commentId={comment.id}
+                  handleEditCommentBtn={handleEditCommentBtn}
+                />
+              )}
+            </div>
+          ))}
+        </Suspense>
       </SignedIn>
       <SignedOut>
         <Link href="/sign-in">

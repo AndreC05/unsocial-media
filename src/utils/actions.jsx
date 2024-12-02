@@ -29,6 +29,7 @@ export async function handlePostLikeBtn(post) {
 //------------------------------------------------------------Handle Post Delete Btn
 
 export async function handlePostDeleteBtn(post) {
+  db.query(`DELETE FROM comments WHERE post_id = ${post.id}`);
   db.query(`DELETE FROM posts WHERE id = ${post.id}`);
   revalidatePath("/posts");
   redirect(`/posts`);
